@@ -2,22 +2,22 @@
    Smooth Scrolling
 ========================== */
 
-document.querySelectorAll('nav a').forEach(link => {
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(e) {
 
-    link.addEventListener('click', function(e){
+        const target = document.querySelector(this.getAttribute("href"));
 
-        e.preventDefault();
+        if (target) {
+            e.preventDefault();
 
-        const target = document.querySelector(this.getAttribute('href'));
-
-        target.scrollIntoView({
-            behavior:'smooth'
-        });
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
 
     });
-
 });
-
 
 /* ==========================
    Active Navigation
@@ -34,8 +34,8 @@ window.addEventListener("scroll", () => {
 
         const sectionTop = section.offsetTop - 120;
 
-        if(pageYOffset >= sectionTop){
-            current = section.getAttribute("id");
+        if (window.scrollY >= sectionTop) {
+            current = section.id;
         }
 
     });
@@ -44,38 +44,29 @@ window.addEventListener("scroll", () => {
 
         link.classList.remove("active");
 
-        if(link.getAttribute("href") == "#" + current){
-
+        if (link.getAttribute("href") === "#" + current) {
             link.classList.add("active");
-
         }
 
     });
 
 });
 
-
 /* ==========================
-   Sticky Header Shadow
+   Sticky Header
 ========================== */
 
 const header = document.querySelector("header");
 
-window.addEventListener("scroll", ()=>{
+window.addEventListener("scroll", () => {
 
-    if(window.scrollY > 40){
-
-        header.style.boxShadow="0 5px 20px rgba(0,0,0,.15)";
-
-    }
-    else{
-
-        header.style.boxShadow="0 3px 10px rgba(0,0,0,.08)";
-
+    if (window.scrollY > 40) {
+        header.style.boxShadow = "0 5px 20px rgba(0,0,0,.15)";
+    } else {
+        header.style.boxShadow = "0 3px 10px rgba(0,0,0,.08)";
     }
 
 });
-
 
 /* ==========================
    Contact Form
@@ -83,33 +74,34 @@ window.addEventListener("scroll", ()=>{
 
 const form = document.querySelector("form");
 
-form.addEventListener("submit",function(e){
+if (form) {
 
-    e.preventDefault();
+    form.addEventListener("submit", function(e) {
 
-    alert("Thank you! Your message has been submitted.");
+        e.preventDefault();
 
-    form.reset();
+        alert("Thank you! Your message has been submitted successfully.");
 
-});
+        form.reset();
 
+    });
+
+}
 
 /* ==========================
-   Simple Scroll Animation
+   Scroll Animation
 ========================== */
 
-const cards = document.querySelectorAll(
-".about-card,.skill-card,.project-card,.resume-box"
-);
+const cards = document.querySelectorAll(".about-card, .skill-card, .project-card, .resume-box");
 
-const observer = new IntersectionObserver(entries=>{
+const observer = new IntersectionObserver((entries) => {
 
-    entries.forEach(entry=>{
+    entries.forEach(entry => {
 
-        if(entry.isIntersecting){
+        if (entry.isIntersecting) {
 
-            entry.target.style.opacity="1";
-            entry.target.style.transform="translateY(0)";
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
 
         }
 
@@ -121,8 +113,14 @@ cards.forEach(card=>{
 
     card.style.opacity="0";
     card.style.transform="translateY(40px)";
-    card.style.transition=".6s";
+    card.style.transition="0.6s";
 
     observer.observe(card);
 
 });
+
+/* ==========================
+   Current Year
+========================== */
+
+document.getElementById("year").textContent = new Date().getFullYear();
